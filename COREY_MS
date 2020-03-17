@@ -1,0 +1,517 @@
+git_Youtube 
+
+1.cd V:/ # go to a dir
+--------------------------------------cmd line
+2.ctrl+a #front of cmd line
+
+3.ctrl+e #end of cmd line
+
+4.ctrl+u #del left of cursor
+
+5.ctrl+k #del right of cursor
+
+6.#del complete line : ctrl+a , ctrl+k or ctrl+e , ctrl+u
+
+7. ls -la
+___________________________________________________COREY SCHAFER______________________________________________________
+
+$ git config --global user.name 'Vishal Singh'
+$ git config --global user.email 'vsingh@google.com'
+$ git config --list
+
+#help
+1. $ git config --help #or
+2. $ git help config
+
+#init : make it root dir
+$ git init
+#remove git : opposite of $ git init
+$ rm -rf .git
+
+#status
+$ git status
+
+#ignore files listed in .gitignore
+$ touch .gitignore
+ 
+#add files : move files, working dir -> staging area
+$ git add -A # add all files
+
+#unstage : move files, staging area -> working dir
+1]unstage 1 file
+$ git reset <file name> #git reset calc.py
+2]unstage all files
+$ git reset
+
+#log : history of commit
+$ git log
+commit 8ffbec842241c668acbb922034470ee92c9468f3 (HEAD -> master)
+Author: Vishal Singh <effort21pool@gmail.com>
+Date:   Mon Mar 16 01:36:59 2020 +0530
+
+    initial commit
+
+#clone 
+$ git clone https://github.com/maxg203/Python-for-Beginners.git
+#https://github.com/[user-name]/[repo-name].git
+
+#info about remote repo
+$ git remote -v
+
+#to see branch system : local + remote
+$ git branch -a
+
+-------------------make changes to commited file
+#make change to calc.py : 
+	print('i am the calc') #changed to 
+	print('i am the calc of the universe')
+
+$ git diff
+-print('i am the calc')
+\ No newline at end of file
++print('i am the calc of the universe')
+\ No newline at end of file
+
+$ git status 
+Changes not staged for commit:
+        modified:   calc.py
+
+$ git add -A
+$ git commit -m 'universe print'
+
+
+#pull push : master(branch) , origin(repo)
+$ git pull origin master #check, any changes to master branch since last pull
+up-to-date
+$ git push origin master #to push the master branch to origin repo
+
+
+------------common workflow--------------------------
+dont work directly on master branch
+step1 : create a branch for a feature you want to work on
+$ git branch print-uni # 1.created branch, print-uni
+$ git branch # check if branch created
+* master #current branch
+  print-uni
+$ git checkout print-uni # 2.switch to that print-uni branch
+
+step2 : 
+#inside print-uni branch
+1.make change to calc.py file, esp to print function on universe
+print('calc is for e"one')
+print('how you doing?')
+2.$ git add -A
+3.$ git commit -m 'joey'
+it has no effect on remote repo yet.
+
+step3 : 
+#change remote repo
+$ git push -u origin print-uni
+
+step4 :
+#1. switch to master
+$ git checkout master
+#2. check if changes to (origin master) made by someone else (remote one)
+$ git pull origin master
+
+#print-uni not yet branch of master
+$ git branch  #branches we have merged so far
+*master
+#3. merge print-uni (to master)
+$ git merge print-uni
+#git branch --merged
+*master
+print-uni
+
+#4. push change to origin(remote repo)
+$ git push origin master
+
+step5 :
+
+once you have merged a branch to the master you can delete it
+#1. delete locally
+$ git branch -d print-uni
+#2. delete from remote repo
+$ git push origin --delete print-uni
+
+
+____________________corey video 2___________
+
+1.problem : undo ctrl+s changes
+in calc.py - you made some changes 
+(add a few line or sth)
+and pressed ctrl+s
+Note : you did not perform - add or commit
+To undo your saved changes
+(undo effects of ctrl+s)
+
+$ git checkout calc.py
+
+2.problem : modify commit msg w/o additional commit
+
+1)make changes to calc.py
+#added at end
+the button to sort the array in ascending order
+2)git add -A
+3)git commit -m 'print function' # wrong msg
+
+solution
+1)git commit --amend -m 'added gibberish'
+Note : git history changed (hash changed)
+
+3.problem : 
+forgot to attach a file while commit AND want to add that file now to this last commit
+
+soultion:
+let that file be : tools.py
+1)touch tools.py
+print('some tools for calc')#add in tools.py
+2)git add -A
+3)git commit --amend
+4)opens vim 
+press i
+press Esc
+press :wq
+5)git log --stat
+$ git log --stat
+commit ac1689b54a8563f81cf791cf9c552b5e2ddef43b (HEAD -> master)
+Author: Vishal Singh <effort21pool@gmail.com>
+Date:   Mon Mar 16 13:39:52 2020 +0530
+
+    added gibberish
+
+ calc.py  | 2 ++
+ tools.py | 1 +
+ 2 files changed, 3 insertions(+)
+...
+Note : 
+git history changed (hash changed)
+do this only if u havent pushed changes to others
+
+4.Problem : 
+commited changes to master 
+-instead of-
+commiting to a branch (print-msg)
+
+Now want 
+1]tranfer that commit from master to print-msg(branch)
+2]undo commit from master
+
+1)#in master 
+$ git log
+#copy first 5-6 c'ters of hash of the commit u want to tranfer
+f8043e6
+2)#switch to print-msg branch
+3)#in print-msg
+$ git log
+#4 commits presenst in master we had 5
+#we want to transfer that 5th
+
+$ git cherry-pick f8043e6
+
+$ git log
+#5th commit now in print-msg
+
+4)delete 5th commit from master now
+#hard reset
+
+
+---------------------reset
+choosing hash 
+1.select first 5-6 c'ters,
+2.reset will remove all commits before that one.
+eg : 
+	if there are 5 commits
+	you choose 3rd from top
+	top most is most recent 
+	apply reset
+	you will uncommit first 2 commits
+
+	total - 5
+	choose - 3rd
+	uncommit - top 2
+
+1]soft reset
+$ git reset --soft ac1689b5
+#put uncommit files in staging area
+#after git add AND before git commit
+
+2]mixed reset : default
+$ git reset ac1689b5
+#put uncommit files in working dir area
+#before git add
+
+3]hard
+$ git resert --hard ac1689b5
+completely remove changes from e'where
+
+To remove untracked files
+$ git clean df #d-untracked f-force
+
+4.Problem : by mistake hard reset
+
+#see commits in order
+$git reflog
+$git checkout ac1689b
+$git log
+$git branch backup
+$git branch
+* (HEAD detached at ac1689b)
+  backup
+  master
+  print-msg
+$ git checkout master
+Switched to branch 'master'
+$ git branch
+  backup
+* master
+  print-msg
+$ git checkout backup
+Switched to branch 'backup'
+$ git branch
+* backup
+  master
+  print-msg
+$ git log
+commit ac1689b54a8563f81cf791cf9c552b5e2ddef43b (HEAD -> backup, master)
+Author: Vishal Singh <effort21pool@gmail.com>
+Date:   Mon Mar 16 13:39:52 2020 +0530
+
+    added gibberish
+
+-----------------git revert
+#a new commit : to undo : previous commit
+Note :
+in case when we made a commit
+someone pulled changes after that
+want to undo commit
+use 'revert'
+
+$git revert ac1689b5
+
+
+----------------git diff two commits
+$ git diff 523cf3e1b 50c64c40
+
+
+
+____________corey video 3_______________
+
+#stash
+use : save new changes temporarily
+and go back revert do sth etc
+
+step1 : create new branch & switch to it
+$git branch -b new3
+step2 : make changes to calc.py
+#add this line at end
+print('calc is for e"one')
+print('how you doing?')
+print('hi this is for stash demo')
+step3: see diff
+$git diff
+
+--now you want to save these changes temporarily, to view how the files were before above 3 steps.
+step4 :save changes
+$ git stash save "new 3rd line about stash"
+
+#no changes can be observed
+1)#git diff : list no changes
+$ git diff
+2)
+$ git status
+On branch new3
+nothing to commit, working tree clean
+3)calc.py : added line removed
+print('calc is for e"one')
+print('how you doing?')
+
+#stash show saved changes
+$ git stash list
+stash@{0}: On new3: new 3rd line about stash
+
+
+step5 : do whatever you want to
+
+step6 : apply changes saved in stash
+$ git stash apply stash@{0}
+
+
+sub-problem : deleting from stash
+#after step6 
+#we have changes back
+#but stash is not empty
+
+$ git checkout -- . #undo step6
+solution
+step6: #pops from stash and apply 
+$ git stash list
+stash@{0}: On new3: new 3rd line about stash
+$ git stash pop
+$ git stash list
+ 
+
+#changes can be seen now
+1)file
+print('calc is for e"one')
+print('how you doing?')
+print('hi this is for stash demo')
+2)$ git diff
++print('hi this is for stash demo')
+\ No newline at end of file
+
+
+-------for stash 
+#To remove 1 'saved change' from stash
+$ git stash drop stash@{0}
+#To remove all 'saved change' from stash
+$ git stash clear
+
+-------use stas for another problem
+Problem :
+You  made changes in 1 branch (master)
+but actually wanted in another branch (new3)
+
+To commit changes made in master branch
+in new3 instead of master.
+
+1.make changes in master 
+2.in branch master
+3.save change in stash
+4.go to branch new3
+5.pop the stash
+
+
+Step1 : #in master
+make changes in calc.py
+Step2 : #save changes to stash
+$ git stash save 'changes for new3 branch'
+Step3 : #go to new3 branch
+$ git checkout new3
+Step4 : #pop stash
+$ git stash pop
+
+
+_______________corey video 4_____________
+
+$ git config --list
+core.symlinks=false
+core.autocrlf=true
+core.fscache=true
+color.diff=auto
+color.status=auto
+color.branch=auto
+color.interactive=true
+help.format=html
+rebase.autosquash=true
+http.sslbackend=openssl
+http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+credential.helper=manager
+gui.recentrepo=V:/GIT
+user.name=Vishal Singh
+user.email=effort21pool@gmail.com
+core.repositoryformatversion=0
+core.filemode=false
+core.bare=false
+core.logallrefupdates=true
+core.symlinks=false
+core.ignorecase=true
+gui.wmstate=normal
+gui.geometry=893x435+286+170 175 196
+
+
+$ git config --list
+core.symlinks=false
+core.autocrlf=true
+core.fscache=true
+color.diff=auto
+color.status=auto
+color.branch=auto
+color.interactive=true
+help.format=html
+rebase.autosquash=true
+http.sslbackend=openssl
+http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+credential.helper=manager
+gui.recentrepo=V:/GIT
+user.name=Vishal Singh
+user.email=effort21pool@gmail.com
+diff.tool=diffmerge
+difftool.diffmerge.cmd=C:/Program\ Files/SourceGear/Common/DiffMerge/sgdm.exe"$LOCAL" "$REMOTE"
+merge.tool=diffmerge
+mergetool.diffmerge.trustexitcode=true
+mergetool.diffmerge.cmd=C:/Program\ Files/SourceGear/Common/DiffMerge/sgdm.exe-merge -result="$MERGED" "$LOCAL" "$BASE" "$REMOTE"
+
+
+
+
+
+_________________video last 6_____________
+$ git status
+On branch master
+Changes not staged for commit:
+        deleted:    beta.py
+        modified:   calc.py
+        modified:   sub_dir/file1.txt
+        deleted:    sub_dir/file2.txt
+Untracked files:
+        alpha.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+1.add -A or add --all
+#stage all files(entire tree), (even from sub dir)
+$ git add -A
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   alpha.py
+        deleted:    beta.py
+        modified:   calc.py
+        modified:   sub_dir/file1.txt
+        deleted:    sub_dir/file2.txt
+        new file:   sub_dir/file3.txt
+
+
+2.add -A #from sub_dir
+#same result as above, stage all files
+
+3.#in main dir
+$ git add -A sub_dir/
+$ git status
+On branch master
+		modified:   sub_dir/file1.txt
+        deleted:    sub_dir/file2.txt
+Changes not staged for commit:
+        deleted:    beta.py
+        modified:   calc.py
+Untracked files:
+        alpha.py
+
+
+3. git add -A #is default
+git add -A sub_dir/  ==  git add sub_dir/
+
+Note : git add -A != git add (error)
+
+4.Do not stage deleted files from sub_dir
+$ git add --no-all sub_dir/
+
+5.Do not stage untracked files (only deleted and modified)
+$ git add -u
+
+#for sub_dif
+$ git add -u sub_dir/
+
+6.stage all files of 'current dir'
+$ git add .
+
+
+7.Dont use
+$ git add *
+stage all files except
+1)hidden files
+2)deleted files of current folder
+But stages deleted files from sub_dir or super_dir
