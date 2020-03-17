@@ -1,0 +1,169 @@
+$ git init //create new git repository
+initialise
+creates .git folder
+
+
+$ git add <file>
+add files to staging area 
+does not commit
+before commit
+
+
+$ git status
+check staging area
+see the tree, before commit
+
+
+$ git commit
+from index and staging area to repository
+
+$ git push 
+local repo to remote repo
+
+$ git pull
+take latest remote repo to local repo
+
+$ git clone
+to download a repo from github
+
+
+$ sudo apt-get install git //install git (linux)
+
+
+once you run $ git init, the folder is master dir
+and you can run git cmds now.
+
+1st thing to do after $ git init
+set email id and name to git
+1]name
+$ git config --global user.name 'Vishal Singh'
+$ git config --global user.email 'effort21pool@gmail.com'
+
+
+----------ADD
+unstaged to staged , filename:
+$ git add index.html
+staged to unstaged :
+$ git rm --cached index.html
+unstaged to staged , file extension:
+$ git add *.html
+unstaged to staged , all files:
+$ git add .
+
+--------COMMIT
+$ git commit
+---type msg at vim
+opens vim editor (here we type the commit msg)
+(with comments using '#')
+to start typing, press : i
+	type your msg
+press ESC when done
+press :wq
+---type msg on terminal itself
+$ git commit -m 'Changed app.js'
+
+---------GIT IGNORE (add all files during $ git add . except files in .gitignore)
+$ touch .gitignore #write -> log.txt <- in it
+$ touch log.txt #write something in it
+$ git add . #adds all files (here .gitignore), Does not add files listed in .gitignore (here log.txt)
+
+
+---------ADD FOLDER & IGNORE FOLDER
+step1 :
+create two folders with 1 file in each
+dir1
+	app1.js
+dir2
+	app2.js
+step2 :
+add dir2 to .gitignore
+type -> /dir2 <- in .gitignore
+step3 :
+$ git add .
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   .gitignore
+        new file:   dir1/app1.js
+
+---------GIT IGNORE MULTIPLE
+add -> *.txt <- ignore all txt files
+
+---------GIT BRANCH
+#create new branch
+$ git branch <branch name> 
+$ git branch login
+
+#commit branch master
+$ git commit -m 'another change'
+
+#switch to login(branch) from master(branch)
+$ git checkout login
+
+								Administrator@Gaurav MINGW64 ~/Desktop/myApp (master)
+								$ git branch login
+
+								Administrator@Gaurav MINGW64 ~/Desktop/myApp (master)
+								$ git commit -m 'another change'
+								[master c9c27dc] another change
+								 2 files changed, 3 insertions(+)
+								 create mode 100644 .gitignore
+								 create mode 100644 dir1/app1.js
+
+								Administrator@Gaurav MINGW64 ~/Desktop/myApp (master)
+								$ git checkout login
+								Switched to branch 'login'
+
+								Administrator@Gaurav MINGW64 ~/Desktop/myApp (login)
+								$
+#create a file
+$ touch index.html # write ->login form<- in it
+#
+$ git add .
+#
+$ git commit -m 'login form'
+#return to master
+$ git checkout master
+Note :
+1]you wont see changes made by 'login branch'
+2]wont find 'login.html'
+3]changes made in 'login branch' will  apper unsaved in master branch.
+
+---------GIT MERGE
+#be in master branch
+$ git merge login #opens vim
+In vim : 
+step1 : press i
+step2 : add msg why merging
+step3 : press Esc
+step4 : press :wq
+								Administrator@Gaurav MINGW64 ~/Desktop/myApp (master)
+								$ git merge login
+								Merge made by the 'recursive' strategy.
+								 dir2/app2.js | 1 +
+								 log.txt      | 1 +
+								 login.html   | 9 +++++++++
+								 3 files changed, 11 insertions(+)
+								 create mode 100644 dir2/app2.js
+								 create mode 100644 log.txt
+								 create mode 100644 login.html
+
+
+
+-------GIT REMOTE
+$ git remote # no remote repo
+
+$ git remote add origin https://github.com/punisher21maximum/myAppSample.git
+
+$ git push -u origin master
+
+$ touch README.md
+$ git add . 
+$ git commit -m 'added README.md' 
+$ git push
+
+-------GIT CLONE
+copy the url of a repo
+$ git clone https://github.com/punisher21maximum/myAppSample.git
